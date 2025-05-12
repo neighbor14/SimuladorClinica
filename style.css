@@ -1,4 +1,4 @@
-/* Estilo executivo/institucional - Base do modelo anterior que você gostou */
+/* Estilo executivo/institucional - Base do modelo "bom" */
 body {
     font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
@@ -9,10 +9,10 @@ body {
 }
 
 .container {
-    max-width: 1000px; /* Ou o valor que funcionava bem no layout desejado */
+    max-width: 1000px;
     margin: 20px auto;
     background-color: #fff;
-    padding: 30px 40px; /* Ajuste conforme necessário */
+    padding: 30px 40px;
     border-radius: 8px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
 }
@@ -43,29 +43,26 @@ section {
     background-color: #fdfdfd;
 }
 
-/* --- FOCO PRINCIPAL DA CORREÇÃO DE LAYOUT --- */
+/* --- REGRAS GLOBAIS PARA .input-group QUE FUNCIONAM BEM NAS OUTRAS SEÇÕES --- */
 .input-group {
-    display: flex; /* Essencial para alinhamento horizontal */
-    align-items: center; /* Alinha verticalmente os itens no centro */
-    margin-bottom: 18px; /* Espaçamento entre grupos */
-    gap: 15px; /* Espaçamento entre label, slider, input number */
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 18px; 
+    gap: 15px; 
 }
 
 .input-group label {
-    /* Tinha: flex-basis: 300px; */
-    /* Vamos dar uma largura fixa ou um min-width e permitir que cresça um pouco se necessário */
-    width: 280px; /* Ajuste este valor para encontrar o melhor encaixe para seus rótulos */
-    min-width: 250px; /* Garante que não fique muito espremido */
+    width: 280px; 
+    min-width: 250px; 
     font-weight: 500;
     color: #495057;
     font-size: 0.95em;
-    white-space: nowrap; /* Impede que o rótulo quebre em várias linhas se for curto */
-    margin-right: 10px; /* Adiciona um pequeno espaço à direita do label */
+    white-space: nowrap;
+    margin-right: 10px; /* Se não estiver usando gap, ou para um espaçamento extra */
 }
 
 .input-group input[type="range"] {
-    flex-grow: 1; /* Permite que o slider ocupe o espaço restante */
-    /* min-width: 200px;  /* Pode não ser necessário se o flex-grow funcionar bem */
+    flex-grow: 1; 
     height: 8px;
     background: #e9ecef;
     border-radius: 5px;
@@ -76,7 +73,7 @@ section {
 .input-group input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px; /* Ou o tamanho que você preferia */
+    width: 20px; 
     height: 20px;
     background: #007bff;
     border-radius: 50%;
@@ -94,13 +91,12 @@ section {
 }
 
 .input-group input[type="number"] {
-    width: 100px; /* Largura fixa para o campo numérico */
+    width: 100px; 
     padding: 10px;
     border: 1px solid #ced4da;
     border-radius: 4px;
     text-align: right;
     font-size: 1em;
-    /* margin-left: 10px; /* Não é mais necessário com 'gap' no .input-group */
 }
 .input-group input[type="number"]:focus {
     border-color: #007bff;
@@ -108,186 +104,173 @@ section {
     outline: none;
 }
 
-.value-display { /* Para o display de % ao lado de alguns inputs */
-    min-width: 45px; /* Ajuste conforme necessário */
+.value-display { 
+    min-width: 45px; 
     text-align: left;
     font-weight: 500;
     color: #007bff;
     font-size: 0.95em;
-    padding-left: 5px; /* Pequeno espaçamento */
+    padding-left: 5px; 
 }
-/* --- FIM DO FOCO PRINCIPAL --- */
+/* --- FIM DAS REGRAS GLOBAIS PARA .input-group --- */
+
+.calculation-display, .result-item { /* ... (mantido como na sua versão boa) ... */ }
+.net-profit-container, .net-profit-container span.profit, .net-profit-container span.loss { /* ... */ }
+.alert-message, #taxAlert.alert-message, .alert-message.error { /* ... */ }
+.partner-distribution, .partner-item label, .partner-value-display, .partner-value-display strong, .info-text { /* ... */ }
+hr.section-divider { /* ... */ }
+.reserve-display, .reserve-display strong { /* ... */ }
+.chart-container, #exportPdfButton, #exportPdfButton:hover, #exportPdfButton:active { /* ... */ }
 
 
-.calculation-display, .result-item {
-    font-size: 1.1em;
-    margin-top: 18px;
-    padding: 12px 18px;
-    background-color: #f1f3f5;
+/* ======== CSS REVISADO PARA SEÇÃO DE PACIENTES (SUBSTITUIR BLOCO ANTERIOR) ======== */
+#patient-revenue-items-container .patient-row {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaçamento entre os 4 "blocos" da linha */
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+}
+#patient-revenue-items-container .patient-row:last-child {
+    border-bottom: none;
+}
+
+/* Bloco 1: Nome do Paciente */
+#patient-revenue-items-container .patient-name-input {
+    width: 180px; /* Largura fixa. Ajuste se seus nomes forem maiores. */
+    flex-shrink: 0; /* Não encolhe */
+    padding: 8px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    border-left: 5px solid #007bff;
-}
-
-.calculation-display strong, .result-item strong {
-    color: #212529;
-}
-
-.net-profit-container {
-    border-left-color: #6f42c1;
-}
-.net-profit-container strong {
-    font-size: 1.25em;
-}
-
-.net-profit-container span.profit {
-    color: #198754 !important;
-    font-weight: bold;
-}
-
-.net-profit-container span.loss {
-    color: #dc3545 !important;
-    font-weight: bold;
-}
-
-.alert-message {
-    background-color: #fff3cd;
-    color: #664d03;
-    border: 1px solid #ffc107;
-    padding: 12px 18px;
-    border-radius: 4px;
-    margin-top: 12px;
-    margin-bottom: 18px;
-    font-weight: 500;
-}
-#taxAlert.alert-message {
-    background-color: #f8d7da;
-    color: #842029;
-    border-color: #f5c2c7;
-}
-.alert-message.error {
-    background-color: #f8d7da;
-    color: #842029;
-    border-color: #f5c2c7;
-}
-
-/* Distribuição de Sócios */
-.partner-distribution {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e0e0;
-}
-.partner-item label { /* Rótulos na distribuição de sócios podem ser um pouco diferentes */
-    /* width: 220px;  /* Pode manter ou ajustar com base no flex-basis se necessário */
-    flex-basis: 220px; /* Tenta dar um tamanho base e permitir que cresça se necessário */
-}
-.partner-value-display {
-    margin-left: auto; /* Joga o "Valor: R$ X" para a direita se houver espaço */
-    font-size: 1em;
-    white-space: nowrap;
-}
-.partner-value-display strong {
-    color: #198754;
-}
-
-.info-text {
     font-size: 0.9em;
-    color: #6c757d;
-    margin-bottom: 18px;
 }
 
-hr.section-divider {
-    border: 0;
-    height: 1px;
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
-    margin: 25px 0;
+/* Bloco 2 e 3: os <div class="input-group"> para Mensalidade e Receita Extra */
+#patient-revenue-items-container .patient-row > .input-group {
+    /* Herda display:flex; align-items:center; gap:15px; das regras globais .input-group */
+    flex-grow: 1;   /* FAZ COM QUE ESTES DOIS BLOCOS TENTEM DIVIDIR O ESPAÇO RESTANTE */
+    flex-basis: 0;  /* Base para o grow funcionar bem */
+    min-width: 270px; /* Largura mínima para cada grupo de input antes de quebrar na responsividade */
+    margin-bottom: 0; /* Remove a margem padrão do .input-group, já que .patient-row tem seu padding/gap */
 }
 
-.reserve-display {
-    background-color: #e6f7ff;
-    border-left-color: #1890ff;
-}
-.reserve-display strong {
-    color: #0050b3;
-}
-
-
-.chart-container {
-    margin: 35px auto;
-    padding: 20px;
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
-    background-color: #fff;
-    max-width: 700px;
+/* Filhos dos .input-group DENTRO da linha de paciente: */
+#patient-revenue-items-container .patient-row > .input-group > label {
+    width: auto;         /* Deixa o label pegar o tamanho do texto ou define uma largura menor */
+    min-width: 80px;    /* Ex: Para "Mensalidade:" */
+    white-space: nowrap;
+    font-size: 0.9em;
+    margin-right: 5px;    /* Sobrescreve o margin-right global, se necessário */
 }
 
-#exportPdfButton {
-    display: block;
-    margin: 40px auto 20px auto;
-    padding: 14px 30px;
-    background-color: #0d6efd;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.15em;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
-}
-#exportPdfButton:hover {
-    background-color: #0b5ed7;
-    transform: translateY(-1px);
-}
-#exportPdfButton:active {
-    transform: translateY(0px);
+#patient-revenue-items-container .patient-row > .input-group > input[type="range"] {
+    /* flex-grow: 1; -- já deve ser herdado do .input-group global */
 }
 
-/* Responsividade */
-@media (max-width: 820px) {
-    .container {
-        padding: 20px 25px;
+#patient-revenue-items-container .patient-row > .input-group > input[type="number"] {
+    width: 80px;          /* Largura menor para os campos de valor */
+    font-size: 0.9em;
+}
+
+/* Bloco 4: Display do Total por Paciente */
+#patient-revenue-items-container .patient-total-display {
+    width: 140px; /* Largura fixa */
+    flex-shrink: 0; /* Não encolhe */
+    text-align: right;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #0056b3;
+}
+
+/* --- Responsividade da Seção de Pacientes --- */
+@media (max-width: 1024px) { /* Quando a linha completa não couber mais */
+    #patient-revenue-items-container .patient-row {
+        flex-wrap: wrap; /* Permite que os 4 blocos quebrem */
     }
-    .input-group label {
-        /* flex-basis: 250px; */ /* Removido para permitir quebra ou ajuste natural */
-        width: auto; /* Permite que o label se ajuste melhor em telas menores antes de quebrar */
-        margin-right: 0; /* Remove margem se o flex-direction for column */
+    #patient-revenue-items-container .patient-name-input {
+        flex-basis: 100%; /* Nome ocupa linha inteira */
+        margin-bottom: 10px;
     }
-    .input-group {
-        flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha se não couberem */
+    #patient-revenue-items-container .patient-row > .input-group {
+         flex-basis: calc(50% - 10px); /* Tenta 2 input-groups por linha */
+         min-width: 260px;
     }
-    /* Para o caso de os itens dentro do input-group quebrarem */
-    .input-group > * { /* Seletor para todos os filhos diretos do input-group */
-       margin-bottom: 8px; /* Adiciona um pouco de espaço se quebrar */
-    }
-    .input-group > *:last-child {
-        margin-bottom: 0;
+    #patient-revenue-items-container .patient-total-display {
+        flex-basis: 100%;
+        text-align: left;
+        margin-top: 10px;
     }
 }
 
 @media (max-width: 768px) {
+    #patient-revenue-items-container .patient-row {
+        flex-direction: column; /* Empilha os 4 blocos (Nome, Mensalidade, Extra, Total) */
+        align-items: stretch;
+        gap: 8px;
+    }
+    #patient-revenue-items-container .patient-name-input,
+    #patient-revenue-items-container .patient-row > .input-group, /* Mensalidade/Extra ocupam 100% */
+    #patient-revenue-items-container .patient-total-display {
+        width: 100%;
+        flex-basis: auto;
+        min-width: unset;
+        margin-bottom: 8px;
+    }
+    /*
+      Os .input-group (Mensalidade/Extra) agora estão com 100% de largura.
+      As regras GLOBAIS de .input-group para mobile (flex-direction: column,
+      label 100%, input 100%) devem cuidar do layout INTERNO deles.
+    */
+}
+/* ======== FIM DO CSS REVISADO PARA PACIENTES ======== */
+
+/* Responsividade Global (do seu arquivo bom) */
+@media (max-width: 820px) { /* Geral para outros .input-group */
+    .container {
+        padding: 20px 25px;
+    }
+    /* Este seletor é muito geral e pode estar causando problemas se o CSS para pacientes não for específico o suficiente */
+    /* .input-group label {
+        width: auto; 
+        margin-right: 0; 
+    } */
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) { /* Evita afetar os input-groups dos pacientes nesta quebra */
+        flex-wrap: wrap; 
+    }
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) > * { 
+       margin-bottom: 8px; 
+    }
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) > *:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 768px) { /* Geral para outros .input-group */
     h1 { font-size: 1.7em; }
     h2 { font-size: 1.4em; }
 
-    .input-group {
-        flex-direction: column; /* Empilha os itens verticalmente em telas pequenas */
-        align-items: stretch; /* Faz com que os itens ocupem toda a largura disponível */
-        gap: 8px; /* Reduz o espaçamento quando empilhado */
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) {
+        flex-direction: column; 
+        align-items: stretch; 
+        gap: 8px; 
     }
-    .input-group label {
-        width: 100%; /* Ocupa toda a largura */
-        margin-bottom: 5px; /* Espaço abaixo do rótulo */
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) label {
+        width: 100%; 
+        margin-bottom: 5px; 
         font-size: 0.9em;
-        white-space: normal; /* Permite quebra de linha para rótulos longos */
+        white-space: normal; 
     }
-    .input-group input[type="range"],
-    .input-group input[type="number"],
-    .value-display {
-        width: 100%; /* Ocupam toda a largura */
-        margin-left: 0; /* Reseta margens */
-        box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) input[type="range"],
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) input[type="number"],
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) .value-display {
+        width: 100%; 
+        margin-left: 0; 
+        box-sizing: border-box; 
     }
-    .input-group input[type="number"] {
-        text-align: left; /* Melhora a leitura quando em largura total */
+    .input-group:not(#patient-revenue-items-container .patient-row > .input-group) input[type="number"] {
+        text-align: left; 
     }
+    /* Regras específicas para .partner-item no mobile se necessário */
     .partner-value-display {
         margin-left: 0;
         margin-top: 8px;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador PNL Avançado - Clínica de Idosos</title>
+    <title>Simulador PNL Avançado Detalhado - Clínica de Idosos</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -13,21 +13,14 @@
     <div class="container" id="simuladorContainer">
         <h1>Simulador Interativo de PNL para Clínica de Idosos</h1>
 
-        <!-- Seção 1: Receitas -->
-        <section id="revenue-section">
-            <h2>1. Receitas</h2>
-            <div class="input-group">
-                <label for="numPatientsSlider">Número de Pacientes:</label>
-                <input type="range" id="numPatientsSlider" min="1" max="100" value="30">
-                <input type="number" id="numPatientsNumber" min="1" max="100" value="30">
-            </div>
-            <div class="input-group">
-                <label for="monthlyFeeSlider">Mensalidade Média (R$):</label>
-                <input type="range" id="monthlyFeeSlider" min="1000" max="20000" step="100" value="5000">
-                <input type="number" id="monthlyFeeNumber" min="1000" max="20000" step="100" value="5000">
+        <!-- Seção 1: Receitas por Paciente -->
+        <section id="patient-revenue-section">
+            <h2>1. Receitas por Paciente (Máx. 25: 18 Internos + 7 Day Use)</h2>
+            <div id="patient-revenue-items-container">
+                <!-- Linhas de pacientes serão inseridas aqui pelo JavaScript -->
             </div>
             <div class="calculation-display">
-                <strong>Receita Bruta Total: <span id="grossRevenueTotal">R$ 0,00</span></strong>
+                <strong>Receita Bruta Total da Clínica: <span id="totalClinicGrossRevenue">R$ 0,00</span></strong>
             </div>
         </section>
 
@@ -35,10 +28,10 @@
         <section id="opex-section">
             <h2>2. Custos e Despesas Operacionais</h2>
             <div id="expense-items-container">
-                <!-- Itens de despesa serão inseridos aqui pelo JavaScript -->
+                <!-- Itens de despesa serão inseridos aqui -->
             </div>
             <div class="calculation-display">
-                <strong>Total de Custos e Despesas Operacionais: <span id="totalOpExpensesDisplay">R$ 0,00</span></strong>
+                <strong>Total Geral de Custos e Despesas: <span id="totalOpExpensesDisplay">R$ 0,00</span></strong>
             </div>
         </section>
 
@@ -46,7 +39,7 @@
         <section id="prolabore-section">
             <h2>3. Pró-Labore dos Sócios</h2>
             <div id="prolabore-items-container">
-                <!-- Itens de pró-labore serão inseridos aqui -->
+                <!-- Itens de pró-labore dos sócios aqui -->
             </div>
             <div class="calculation-display">
                 Total Pró-Labore: <span id="totalProLaboreDisplay">R$ 0,00</span>
@@ -76,19 +69,19 @@
         <!-- Seção 5: Apuração de Resultados (PNL Simplificado) -->
         <section id="results-section">
             <h2>5. Apuração de Resultados (PNL)</h2>
-            <div class="result-item">Receita Bruta Total: <span id="resultGrossRevenue">R$ 0,00</span></div>
-            <div class="result-item">(-) Custos e Despesas Operacionais: <span id="resultTotalOpExpenses">R$ 0,00</span></div>
+            <div class="result-item">Receita Bruta Total Clínica: <span id="resultClinicGrossRevenue">R$ 0,00</span></div>
+            <div class="result-item">(-) Custos e Despesas Totais: <span id="resultTotalOpExpenses">R$ 0,00</span></div>
             <div class="result-item">(-) Total Pró-Labore: <span id="resultTotalProLabore">R$ 0,00</span></div>
             <div class="result-item">(-) Total Encargos Pró-Labore: <span id="resultTotalProLaboreCharges">R$ 0,00</span></div>
             <div class="result-item">(-) Total de Impostos: <span id="resultTotalTaxes">R$ 0,00</span></div>
             <div class="result-item net-profit-container">
-                <strong>Lucro Líquido: <span id="netProfitLoss">R$ 0,00</span></strong>
+                <strong>Lucro Líquido Final: <span id="netProfitLoss">R$ 0,00</span></strong>
             </div>
         </section>
 
-        <!-- Seção 6: Distribuição do Lucro Líquido -->
+        <!-- Seção 6: Distribuição do Lucro Líquido Final -->
         <section id="profit-distribution-section">
-            <h2>6. Distribuição do Lucro Líquido</h2>
+            <h2>6. Distribuição do Lucro Líquido Final</h2>
             <div class="input-group">
                 <label for="adminFeePercentSlider">Administrador Financeiro (% do Lucro Líquido):</label>
                 <input type="range" id="adminFeePercentSlider" min="0" max="50" step="0.1" value="8.0">
@@ -96,28 +89,29 @@
                 <span id="adminFeePercentDisplay" class="value-display">%</span>
             </div>
             <div class="calculation-display">
-                Valor para Administrador Financeiro: <span id="adminFeeValueDisplay">R$ 0,00</span>
+                Parcela Administrador: <span id="adminFeeValueDisplay">R$ 0,00</span>
             </div>
-            <hr class="section-divider"> <!-- Linha divisória -->
-            <div class="calculation-display">
+            <hr class="section-divider">
+            <div class="calculation-display"> <!-- Adicionado este display que estava faltando na sua última versão HTML mas estava no JS -->
                 <strong>Lucro Disponível para Sócios e Reserva: <span id="profitAvailableForPartnersAndReserveDisplay">R$ 0,00</span></strong>
             </div>
-
-            <!-- NOVO: Input para % a ser distribuída aos sócios -->
-            <div class="input-group">
+            <div class="input-group"> <!-- Adicionado este input group que estava faltando no HTML mas no JS -->
                 <label for="partnerDistributionPercentSlider">% do Lucro (Disponível) a ser Distribuído aos Sócios:</label>
                 <input type="range" id="partnerDistributionPercentSlider" min="0" max="100" step="0.1" value="100.0">
                 <input type="number" id="partnerDistributionPercentNumber" min="0" max="100" step="0.1" value="100.0">
                 <span id="partnerDistributionPercentDisplay" class="value-display">%</span>
             </div>
-            <div class="calculation-display">
+             <div class="calculation-display"> <!-- Adicionado este display que estava faltando no HTML mas no JS -->
                 Valor Total Efetivamente Distribuído aos Sócios: <span id="totalEffectivelyDistributedToPartnersDisplay">R$ 0,00</span>
+            </div>
+            <div class="calculation-display"> <!-- Este já existia, apenas renomeando o span para alinhar com o JS -->
+                <strong>Lucro Distribuível para Divisão entre Sócios: <span id="profitDistributableToPartnersDisplay">R$ 0,00</span></strong>
             </div>
 
 
             <div class="partner-distribution">
-                <h4>Distribuição entre Sócios (do Valor Efetivamente Distribuído):</h4>
-                <p class="info-text">A soma das porcentagens abaixo define como o "Valor Total Efetivamente Distribuído aos Sócios" é dividido. Deve ser 100%.</p>
+                <h4>Distribuição entre Sócios (do "Lucro Distribuível para Divisão"):</h4>
+                <p class="info-text">A soma das porcentagens abaixo define como o "Lucro Distribuível para Divisão" é dividido. Deve ser 100%.</p>
                 
                 <div class="input-group partner-item">
                     <label for="nandoDistPercentSlider">Nando (%):</label>
@@ -144,8 +138,8 @@
                     ⚠️ A soma das porcentagens dos sócios (Nando, Maria Lucia, Daniela) deve ser 100%.
                 </div>
             </div>
-            <hr class="section-divider"> <!-- Linha divisória -->
-            <div class="calculation-display reserve-display"> <!-- Classe para estilo específico -->
+             <hr class="section-divider"> <!-- Divisor para Reserva de Caixa -->
+            <div class="calculation-display reserve-display">
                 <strong>Reserva de Caixa: <span id="cashReserveDisplay">R$ 0,00</span></strong>
             </div>
         </section>
@@ -159,7 +153,6 @@
         </section>
         
         <button id="exportPdfButton">Salvar como PDF</button>
-
     </div>
     <script src="script.js"></script>
 </body>
