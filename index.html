@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador PNL Avançado - Clínica de Idosos</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container" id="simuladorContainer">
+        <h1>Simulador Interativo de PNL para Clínica de Idosos</h1>
+
+        <!-- Seção 1: Receitas -->
+        <section id="revenue-section">
+            <h2>1. Receitas</h2>
+            <div class="input-group">
+                <label for="numPatientsSlider">Número de Pacientes:</label>
+                <input type="range" id="numPatientsSlider" min="1" max="100" value="30">
+                <input type="number" id="numPatientsNumber" min="1" max="100" value="30">
+            </div>
+            <div class="input-group">
+                <label for="monthlyFeeSlider">Mensalidade Média (R$):</label>
+                <input type="range" id="monthlyFeeSlider" min="1000" max="20000" step="100" value="5000">
+                <input type="number" id="monthlyFeeNumber" min="1000" max="20000" step="100" value="5000">
+            </div>
+            <div class="calculation-display">
+                <strong>Receita Bruta Total: <span id="grossRevenueTotal">R$ 0,00</span></strong>
+            </div>
+        </section>
+
+        <!-- Seção 2: Custos e Despesas Operacionais -->
+        <section id="opex-section">
+            <h2>2. Custos e Despesas Operacionais</h2>
+            <div id="expense-items-container">
+                <!-- Itens de despesa serão inseridos aqui pelo JavaScript -->
+            </div>
+            <div class="calculation-display">
+                <strong>Total de Custos e Despesas Operacionais: <span id="totalOpExpensesDisplay">R$ 0,00</span></strong>
+            </div>
+        </section>
+
+        <!-- Seção 3: Pró-Labore dos Sócios -->
+        <section id="prolabore-section">
+            <h2>3. Pró-Labore dos Sócios</h2>
+            <div id="prolabore-items-container">
+                <!-- Itens de pró-labore serão inseridos aqui -->
+            </div>
+            <div class="calculation-display">
+                Total Pró-Labore: <span id="totalProLaboreDisplay">R$ 0,00</span>
+            </div>
+            <div class="calculation-display">
+                Encargos Pró-Labore Total (11%): <span id="totalProLaboreChargesDisplay">R$ 0,00</span>
+            </div>
+        </section>
+
+        <!-- Seção 4: Impostos -->
+        <section id="taxes-section">
+            <h2>4. Impostos</h2>
+            <div class="input-group">
+                <label for="taxRateSlider">Alíquota de Imposto (% sobre Receita Bruta):</label>
+                <input type="range" id="taxRateSlider" min="0" max="30" step="0.01" value="14.02">
+                <input type="number" id="taxRateNumber" min="0" max="30" step="0.01" value="14.02">
+                <span id="taxRateDisplay" class="value-display">%</span>
+            </div>
+            <div id="taxAlert" class="alert-message" style="display: none;">
+                ⚠️ Atenção: Folha salarial (CLT + Encargos CLT) abaixo de 28% da Receita Bruta. Recomendável ajustar alíquota para 19,55%.
+            </div>
+            <div class="calculation-display">
+                <strong>Total de Impostos: <span id="totalTaxesDisplay">R$ 0,00</span></strong>
+            </div>
+        </section>
+
+        <!-- Seção 5: Apuração de Resultados (PNL Simplificado) -->
+        <section id="results-section">
+            <h2>5. Apuração de Resultados (PNL)</h2>
+            <div class="result-item">Receita Bruta Total: <span id="resultGrossRevenue">R$ 0,00</span></div>
+            <div class="result-item">(-) Custos e Despesas Operacionais: <span id="resultTotalOpExpenses">R$ 0,00</span></div>
+            <div class="result-item">(-) Total Pró-Labore: <span id="resultTotalProLabore">R$ 0,00</span></div>
+            <div class="result-item">(-) Total Encargos Pró-Labore: <span id="resultTotalProLaboreCharges">R$ 0,00</span></div>
+            <div class="result-item">(-) Total de Impostos: <span id="resultTotalTaxes">R$ 0,00</span></div>
+            <div class="result-item net-profit-container">
+                <strong>Lucro Líquido: <span id="netProfitLoss">R$ 0,00</span></strong>
+            </div>
+        </section>
+
+        <!-- Seção 6: Distribuição do Lucro Líquido -->
+        <section id="profit-distribution-section">
+            <h2>6. Distribuição do Lucro Líquido</h2>
+            <div class="input-group">
+                <label for="adminFeePercentSlider">Administrador Financeiro (% do Lucro Líquido):</label>
+                <input type="range" id="adminFeePercentSlider" min="0" max="50" step="0.1" value="8.0">
+                <input type="number" id="adminFeePercentNumber" min="0" max="50" step="0.1" value="8.0">
+                <span id="adminFeePercentDisplay" class="value-display">%</span>
+            </div>
+            <div class="calculation-display">
+                Valor para Administrador Financeiro: <span id="adminFeeValueDisplay">R$ 0,00</span>
+            </div>
+            <hr class="section-divider"> <!-- Linha divisória -->
+            <div class="calculation-display">
+                <strong>Lucro Disponível para Sócios e Reserva: <span id="profitAvailableForPartnersAndReserveDisplay">R$ 0,00</span></strong>
+            </div>
+
+            <!-- NOVO: Input para % a ser distribuída aos sócios -->
+            <div class="input-group">
+                <label for="partnerDistributionPercentSlider">% do Lucro (Disponível) a ser Distribuído aos Sócios:</label>
+                <input type="range" id="partnerDistributionPercentSlider" min="0" max="100" step="0.1" value="100.0">
+                <input type="number" id="partnerDistributionPercentNumber" min="0" max="100" step="0.1" value="100.0">
+                <span id="partnerDistributionPercentDisplay" class="value-display">%</span>
+            </div>
+            <div class="calculation-display">
+                Valor Total Efetivamente Distribuído aos Sócios: <span id="totalEffectivelyDistributedToPartnersDisplay">R$ 0,00</span>
+            </div>
+
+
+            <div class="partner-distribution">
+                <h4>Distribuição entre Sócios (do Valor Efetivamente Distribuído):</h4>
+                <p class="info-text">A soma das porcentagens abaixo define como o "Valor Total Efetivamente Distribuído aos Sócios" é dividido. Deve ser 100%.</p>
+                
+                <div class="input-group partner-item">
+                    <label for="nandoDistPercentSlider">Nando (%):</label>
+                    <input type="range" id="nandoDistPercentSlider" data-partner="nando" min="0" max="100" step="0.1" value="33.3">
+                    <input type="number" id="nandoDistPercentNumber" data-partner="nando" min="0" max="100" step="0.1" value="33.3">
+                    <span id="nandoDistPercentDisplay" class="value-display">%</span>
+                    <span class="partner-value-display">Valor: <strong id="nandoDistValueDisplay">R$ 0,00</strong></span>
+                </div>
+                <div class="input-group partner-item">
+                    <label for="mariaLuciaDistPercentSlider">Maria Lucia (%):</label>
+                    <input type="range" id="mariaLuciaDistPercentSlider" data-partner="mariaLucia" min="0" max="100" step="0.1" value="33.3">
+                    <input type="number" id="mariaLuciaDistPercentNumber" data-partner="mariaLucia" min="0" max="100" step="0.1" value="33.3">
+                    <span id="mariaLuciaDistPercentDisplay" class="value-display">%</span>
+                    <span class="partner-value-display">Valor: <strong id="mariaLuciaDistValueDisplay">R$ 0,00</strong></span>
+                </div>
+                <div class="input-group partner-item">
+                    <label for="danielaDistPercentSlider">Daniela (%):</label>
+                    <input type="range" id="danielaDistPercentSlider" data-partner="daniela" min="0" max="100" step="0.1" value="33.4">
+                    <input type="number" id="danielaDistPercentNumber" data-partner="daniela" min="0" max="100" step="0.1" value="33.4">
+                    <span id="danielaDistPercentDisplay" class="value-display">%</span>
+                    <span class="partner-value-display">Valor: <strong id="danielaDistValueDisplay">R$ 0,00</strong></span>
+                </div>
+                <div id="partnerPercentSumAlert" class="alert-message error" style="display: none;">
+                    ⚠️ A soma das porcentagens dos sócios (Nando, Maria Lucia, Daniela) deve ser 100%.
+                </div>
+            </div>
+            <hr class="section-divider"> <!-- Linha divisória -->
+            <div class="calculation-display reserve-display"> <!-- Classe para estilo específico -->
+                <strong>Reserva de Caixa: <span id="cashReserveDisplay">R$ 0,00</span></strong>
+            </div>
+        </section>
+
+        <!-- Seção 7: Gráfico de Despesas -->
+        <section id="charts-section">
+            <h2>7. Gráfico de Despesas</h2>
+            <div class="chart-container">
+                <canvas id="expensesChart"></canvas>
+            </div>
+        </section>
+        
+        <button id="exportPdfButton">Salvar como PDF</button>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
